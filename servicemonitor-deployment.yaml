@@ -1,0 +1,61 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expose-prometheus-demo
+  labels:
+    app: expose-prometheus-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: expose-prometheus-demo
+  template:
+    metadata:
+      labels:
+        app: expose-prometheus-demo
+    spec:
+      containers:
+      - name: expose-prometheus-demo
+        image: hengyunabc/expose-prometheus-demo:0.0.1-SNAPSHOT
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        - containerPort: 8090
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: expose-prometheus-demo-service
+  labels:
+    app: expose-prometheus-demo
+    release: prometheus
+spec:
+  selector:
+    app: expose-prometheus-demo
+  ports:
+    - protocol: TCP
+      name: http-traffic
+      port: 8080
+      targetPort: 8080
+    - protocol: TCP
+      name: metric-traffic
+      port: 8090
+      targetPort: 8090
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: expose-prometheus-demo-service-monitor
+  labels:
+    app: expose-prometheus-demo
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: expose-prometheus-demo
+  endpoints:
+  - port: metric-traffic
+    path: "/actuator/prometheus"
