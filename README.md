@@ -6,7 +6,7 @@
 ./mvnw clean package -DskipTests
 ```
 
-### 构建docker镜像
+### 构建docker镜像
 
 ```
 docker build . -t hengyunabc/expose-prometheus-demo:0.0.1-SNAPSHOT
@@ -146,7 +146,7 @@ spec:
 
 * https://grafana.com/grafana/dashboards/4701
 
-在Grafana UI里，在`Dashboards`,`Manage`,`Import`，填入`4701`。导入成功之后，就可以在Dashboards里找到`JVM (Micrometer)`。
+在Grafana UI里，在`Dashboards`,`Manage`,`Import`，填入`4701`。导入成功之后，就可以在Dashboards里找到`JVM (Micrometer)`。
 
 打开之后可以看到 expose-prometheus-demo的监控信息。
 
